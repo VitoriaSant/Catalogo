@@ -19,9 +19,21 @@
           <!-- <div class="page-text">
             {{ place.description }}
           </div> -->
-          <v-btn>
-            Button
-          </v-btn>
+          <div>
+            
+            <v-select 
+              density="compact" 
+              label="Detalhamento" 
+              min-width="300"
+              :items="product.detalhamento"  
+              item-text="desVariacao"
+              item-value="variacao"
+            >
+
+            <!-- <v-option v-for="(Variacao, idVariacao) in product.detalhamento">{{ Variacao.desVariacao }}</option> -->
+              
+            </v-select>
+          </div>
           <div class="page-footer">{{ index + 1 }}</div>
         </div>
       </div>
@@ -45,6 +57,8 @@ const search = ref("");
 
 const filteredProducts = ref<Product[]>(props.products);
 
+function selectProduct(){
+}
 
 function searchProduct() {
   const productsFilter = props.products.filter((product: Product) =>
@@ -88,6 +102,8 @@ function buildBook() {
     maxShadowOpacity: 0.5, // Half shadow intensity
     showCover: true,
     mobileScrollSupport: false, // disable content scrolling on mobile devices
+    disableFlipByClick: true,
+    
   });
 
   const pages = document.querySelectorAll(".page") as NodeListOf<HTMLElement>;
