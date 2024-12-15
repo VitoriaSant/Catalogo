@@ -1,7 +1,7 @@
 interface Imagem {
   ordem: number,
   tamanho: number,
-  urlImagem: string,
+  url: string,
 }
 
 interface Detalhamento{
@@ -10,7 +10,7 @@ interface Detalhamento{
   desAcabamento: string,
   desCor: string,
   desVariacao: string,
-  imagem: Imagem[],
+  imagens: Imagem[],
 }
 
 export default class Product {

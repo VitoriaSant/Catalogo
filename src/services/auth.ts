@@ -1,6 +1,5 @@
 import { api } from "@/services/api";
 
-// Tipagem para a resposta da API
 interface AuthResponse {
     token_Acesso: string;
 }
@@ -8,10 +7,8 @@ interface AuthResponse {
 interface AuthError {
     idError: string;
     messageError: string;
-    error: unknown; // Pode ser mais específico dependendo de como o erro é estruturado
 }
-
-export async function auth(): Promise<string> {
+export async function auth(){
     try {
         const atentication = await api.post<AuthResponse>(
             import.meta.env.VITE_API_AUTH_URL,
@@ -21,7 +18,8 @@ export async function auth(): Promise<string> {
                 quebra: 1,
             }
         );
-        return atentication.data.token_Acesso;
+        localStorage.setItem("auth_token", atentication.data.token_Acesso);
+        // return atentication.data.token_Acesso;
     } catch (error: unknown) {
         // Lançando o erro com o tipo correto
         throw {

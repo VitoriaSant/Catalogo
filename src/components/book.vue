@@ -13,25 +13,39 @@
       <div class="page" v-for="(product, index) in filteredProducts">
         <div class="page-content">
           <h2 class="page-header">{{ product.descricao }}</h2>
-          <!-- <div class="page-image">
-            <img :src="place.urlImage" alt="" />
-          </div> -->
-          <!-- <div class="page-text">
-            {{ place.description }}
-          </div> -->
+          <!-- <h6 class="page-header" v-for="(detalhe, detIndex) in product.detalhamento" :key="detIndex">            
+            {{  detalhe.imagens}} -->
+          <!-- <div v-for="(img, imgId) in detalhe.imagens" :key="imgId">
+              <div>{{ img.url}}</div>
+            </div> -->
+          <!-- </h6> -->
+          <!-- {{ product.detalhamento}} -->
           <div>
-            
-            <v-select 
-              density="compact" 
-              label="Detalhamento" 
-              min-width="300"
-              :items="product.detalhamento"  
-              item-text="desVariacao"
-              item-value="variacao"
-            >
+            <v-carousel height="400" show-arrows="hover" cycle hide-delimiter-background>
+              <v-carousel-item v-for="(img, imgId) in product.detalhamento" :key="imgId">
+                <v-sheet height="100%">
+                  <v-img :src="img.url" cover />
+                </v-sheet>
+              </v-carousel-item>
+            </v-carousel>
 
-            <!-- <v-option v-for="(Variacao, idVariacao) in product.detalhamento">{{ Variacao.desVariacao }}</option> -->
-              
+            <v-select 
+            density="compact" 
+            label="Detalhamento" 
+            min-width="300" 
+            :items="product.detalhamento"
+            :item-title="item => concatenateProduct(item)"
+            
+            >
+            <!-- </v-select> -->
+            
+
+
+              <!-- <template v-slot:selection="{ item}">
+                <span  @click="setImages" >{{ item.value.imagens }}</span>
+              </template> -->
+
+
             </v-select>
           </div>
           <div class="page-footer">{{ index + 1 }}</div>
@@ -56,15 +70,31 @@ const pageFlip = ref<PageFlip>();
 const search = ref("");
 
 const filteredProducts = ref<Product[]>(props.products);
+const filteredDetailing = [];
 
-function selectProduct(){
+function setImages(){
+  alert("oi")
+}
+
+function concatenateProduct(item) {
+  let cor = item.desCor == "INDEFINIDA" ? "" : item.desCor;
+  let variacao = item.desVariacao == "INDEFINIDA" ? "" : item.desVariacao;
+  let acabamento = item.desAcabamento == "INDEFINIDO" ? "" : item.desAcabamento;
+  let descricaoConcatenada = "";
+
+  descricaoConcatenada = cor ? " - " + cor : "";
+  descricaoConcatenada = descricaoConcatenada + (variacao ? " - " + variacao : "");
+  descricaoConcatenada = descricaoConcatenada + (acabamento ? " - " + acabamento : "");
+
+  return descricaoConcatenada ? descricaoConcatenada.slice(2) : "INDEFINIDO";
+
 }
 
 function searchProduct() {
   const productsFilter = props.products.filter((product: Product) =>
     product.descricao.toLowerCase().includes(search.value.toLowerCase())
   );
-  
+
   console.log(productsFilter);
 
   filteredProducts.value = productsFilter;
@@ -103,7 +133,7 @@ function buildBook() {
     showCover: true,
     mobileScrollSupport: false, // disable content scrolling on mobile devices
     disableFlipByClick: true,
-    
+
   });
 
   const pages = document.querySelectorAll(".page") as NodeListOf<HTMLElement>;

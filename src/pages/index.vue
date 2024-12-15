@@ -1,5 +1,5 @@
 <template>
-  <Book title="My Book" :products="products" />
+  <Book title="My Book" :products="products" v-if="products.length > 0"/>
 </template>
 
 <script lang="ts" setup>
@@ -10,12 +10,19 @@ import Product from "@/classes/product";
 
 const products = ref<Product[]>([]); 
 
+
+
 onMounted(async () => {
   try {
-    const token = await auth();
-    const produtos = await getProdutos(token);
-    products.value = produtos.itens; // Atualize a lista de produtos
-    console.log(products.value);
+    auth();
+    const token = localStorage.getItem("auth_token");;
+      if (!token) {
+        console.log("Token não encontrado.");
+      }else {
+        const produtos = await getProdutos(token);
+        products.value = produtos.itens; // Astualize a lista de produtos
+        console.log(products.value);
+      }
   } catch (error) {
     console.error(error.messageError);
     if (error.IdError === 'ERR_AUTH') {
